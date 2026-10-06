@@ -26,10 +26,15 @@ jobs:
         uses: actions/checkout@v4
       - name: Configure Pages
         uses: actions/configure-pages@v5
+      - name: Prepare site artifact
+        run: |
+          mkdir -p _site/assets
+          cp index.html styles.css app.js ramadan-logo.svg _site/
+          cp assets/ramadan-night-loop.mp3 _site/assets/
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: .
+          path: _site
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
