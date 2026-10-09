@@ -33,11 +33,28 @@
     day: 'numeric', month: 'long', year: 'numeric',
   });
 
+  // تصحيح محلي معتمد من المستخدم: عرض تاريخ أم القرى السابق بيوم.
+  const HIJRI_DAY_OFFSET = -1;
+  let renderedTodayKey = '';
+  function updateTodayDate() {
+    const now = new Date();
+    const dateKey = `${now.getFullYear()}-${now.getMonth()}-${now.getDate()}`;
+    if (dateKey === renderedTodayKey) return;
+    renderedTodayKey = dateKey;
+    const correctedDate = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate() + HIJRI_DAY_OFFSET,
+    );
+    const hijriText = todayFormatter.format(correctedDate).replace('ربيع الآخر', 'ربيع الثاني');
+    nodes.today.textContent = `اليوم: ${hijriText}`;
+  }
+
   nodes.hijri.textContent = hijriFormatter.format(ramadanStart);
   nodes.gregorian.textContent = `${weekdayFormatter.format(ramadanStart)}، ${gregorianFormatter.format(ramadanStart)}`;
-  nodes.today.textContent = `اليوم: ${todayFormatter.format(new Date())}`;
 
   function updateCountdown() {
+    updateTodayDate();
     const remaining = Math.max(0, ramadanStart.getTime() - Date.now());
     const secondsTotal = Math.floor(remaining / 1000);
     const days = Math.floor(secondsTotal / 86400);
