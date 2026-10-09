@@ -1,6 +1,8 @@
 (() => {
-  // موعد تقديري محلي لبداية ١ رمضان ١٤٤٨ هـ؛ قد يتغير بإعلان رؤية الهلال.
-  const ramadanStart = new Date(2027, 1, 8, 0, 0, 0, 0);
+  // غروب الشمس المتوقع في المنصورة، الدقهلية، يوم ٧ فبراير ٢٠٢٧: ٥:٣٤ م بتوقيت مصر (UTC+02).
+  const countdownTarget = new Date('2027-02-07T17:34:00+02:00');
+  // اليوم المدني الأول من رمضان المتوقع هو الاثنين ٨ فبراير ٢٠٢٧.
+  const ramadanDay = new Date('2027-02-08T12:00:00+02:00');
   const numberFormat = new Intl.NumberFormat('ar-EG', { useGrouping: false });
   const byId = (id) => document.getElementById(id);
   const nodes = {
@@ -12,6 +14,7 @@
     hijri: byId('ramadan-date'),
     gregorian: byId('gregorian-date'),
     today: byId('today-date'),
+    sunset: byId('sunset-date'),
     share: byId('share-button'),
     shareLabel: byId('share-label'),
     audio: byId('ramadan-music'),
@@ -23,11 +26,19 @@
   };
 
   const hijriFormatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura', {
-    day: 'numeric', month: 'long', year: 'numeric',
+    day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Africa/Cairo',
   });
-  const weekdayFormatter = new Intl.DateTimeFormat('ar', { weekday: 'long' });
-  const gregorianFormatter = new Intl.DateTimeFormat('ar', {
-    day: 'numeric', month: 'long', year: 'numeric',
+  const weekdayFormatter = new Intl.DateTimeFormat('ar-EG', {
+    weekday: 'long', timeZone: 'Africa/Cairo',
+  });
+  const gregorianFormatter = new Intl.DateTimeFormat('ar-EG', {
+    day: 'numeric', month: 'long', year: 'numeric', timeZone: 'Africa/Cairo',
+  });
+  const sunsetDateFormatter = new Intl.DateTimeFormat('ar-EG', {
+    weekday: 'long', day: 'numeric', month: 'long', timeZone: 'Africa/Cairo',
+  });
+  const sunsetTimeFormatter = new Intl.DateTimeFormat('ar-EG', {
+    hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Africa/Cairo',
   });
   const todayFormatter = new Intl.DateTimeFormat('ar-SA-u-ca-islamic-umalqura', {
     day: 'numeric', month: 'long', year: 'numeric',
@@ -50,12 +61,13 @@
     nodes.today.textContent = `اليوم: ${hijriText}`;
   }
 
-  nodes.hijri.textContent = hijriFormatter.format(ramadanStart);
-  nodes.gregorian.textContent = `${weekdayFormatter.format(ramadanStart)}، ${gregorianFormatter.format(ramadanStart)}`;
+  nodes.hijri.textContent = hijriFormatter.format(ramadanDay);
+  nodes.gregorian.textContent = `${weekdayFormatter.format(ramadanDay)}، ${gregorianFormatter.format(ramadanDay)}`;
+  nodes.sunset.textContent = `غروب المنصورة، الدقهلية المتوقع: ${sunsetDateFormatter.format(countdownTarget)}، ${sunsetTimeFormatter.format(countdownTarget)}`;
 
   function updateCountdown() {
     updateTodayDate();
-    const remaining = Math.max(0, ramadanStart.getTime() - Date.now());
+    const remaining = Math.max(0, countdownTarget.getTime() - Date.now());
     const secondsTotal = Math.floor(remaining / 1000);
     const days = Math.floor(secondsTotal / 86400);
     const hours = Math.floor((secondsTotal % 86400) / 3600);
@@ -67,7 +79,7 @@
     nodes.minutes.textContent = numberFormat.format(minutes).padStart(2, '٠');
     nodes.seconds.textContent = numberFormat.format(seconds).padStart(2, '٠');
     nodes.status.textContent = remaining === 0
-      ? 'رمضان مبارك — تقبّل الله منّا ومنكم صالح الأعمال'
+      ? 'حان مغرب ليلة رمضان — رمضان مبارك، تقبّل الله منّا ومنكم صالح الأعمال'
       : 'لحظةٌ أقرب إلى شهر الرحمة';
   }
 

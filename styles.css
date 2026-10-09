@@ -80,6 +80,7 @@ h1 .ramadan-word::after { right: -12px; content: '✧'; transform: translate(100
 .date-caption { color: #9caf9f; font-size: 11px; }
 .date-copy strong { color: #f3e6c7; font-size: 17px; font-weight: 700; }
 .gregorian-date { color: #bdc7ba; font-size: 12px; }
+.sunset-date { color: #9caf9f; font-size: 10px; line-height: 1.6; }
 .date-arrow { color: #ceb875; font-size: 14px; }
 .share-button { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 43px; margin-top: 17px; padding: 0 18px; border: 1px solid rgba(228, 199, 131, .33); border-radius: 999px; color: #ecd8a4; background: rgba(228, 199, 131, .07); cursor: pointer; font-size: 13px; font-weight: 600; transition: color .2s ease, background .2s ease, transform .2s ease, border-color .2s ease; }
 .share-button:hover, .ambience-button:hover, .motion-button:hover { transform: translateY(-2px); border-color: rgba(228, 199, 131, .6); color: #fff3d0; background: rgba(228, 199, 131, .13); }
